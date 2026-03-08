@@ -1,0 +1,3 @@
+* =rebound.el= - Safely rebind the prefix keys.
+
+This package rebinds =C-c= to =C-d= and =C-x= to =C-e=.
