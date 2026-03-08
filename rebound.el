@@ -226,6 +226,6 @@ prefixed bindings."
     (advice-remove 'describe-buffer-bindings
                    #'rebound--describe-buffer-bindings-advice)))
 
-(provide 'rebound-mode)
+(provide 'rebound)
 
 ;;; rebound.el ends here
