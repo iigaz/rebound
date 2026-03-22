@@ -27,7 +27,7 @@
 ;; The intended purpose of the package is to give you the ability to
 ;; configure `rebound-cc-key' and `rebound-cx-key' to be used in place
 ;; of C-c and C-x respectively, so that you can safely bind functions
-;; to C-c and C-x -- preferably in `rebound-key-map' or
+;; to C-c and C-x -- preferably in `rebound-mode-map' or
 ;; `rebound-important-key-map', which are only activated when the mode
 ;; is active.  The latter map allows you to override minor and
 ;; major mode key maps (but still can be overwritten by some maps in
@@ -58,14 +58,8 @@ Changes take effect when `rebound-mode' is activated."
   :type 'string
   :group 'rebound-mode)
 
-(defvar rebound-key-map (make-sparse-keymap)
+(defvar rebound-mode-map (make-sparse-keymap)
   "Regular `rebound-mode' minor mode key map.")
-
-(defvar rebound-important-key-map (make-sparse-keymap)
-  "Key map that overrides regular key bindings.
-It goes into `emulation-mode-map-alists', so it overrides minor modes,
-local and global maps, but still can be overwritten by some maps,
-e.g. `overriding-local-map'.")
 
 (defun rebound--minor-mode-key-binding (key)
   "Return all keymaps defined to KEY within minor modes.
@@ -193,10 +187,7 @@ Expect it to get cleared by `rebound--update-keys'.")
                         (eq (caar x) 'rebound-mode)))
                     emulation-mode-map-alists))
   (add-to-list 'emulation-mode-map-alists
-	           `((rebound-mode . ,(append
-                                   rebound-mode--prefix-keys-map
-                                   (cdr
-                                    rebound-important-key-map))))))
+	           `((rebound-mode . ,rebound-mode--prefix-keys-map))))
 
 ;;;###autoload
 (define-minor-mode rebound-mode
@@ -205,14 +196,9 @@ This allows you to bind functions on C-x and C-c without missing on
 prefixed bindings."
   :lighter " Rebnd"
   :init-value nil
-  :require 'rebound-mode
   :global t
-  :keymap rebound-key-map
+  :keymap rebound-mode-map
   :group 'rebound-mode
-  (rebound--setup))
-
-(defun rebound--setup ()
-  "Setup the `rebound-mode' minor mode."
   (if rebound-mode
       (progn
         (advice-add 'substitute-command-keys
