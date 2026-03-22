@@ -36,8 +36,6 @@ install and configure =rebound=. Here's an example configuration:
      ("C-s" . save-buffer)
      ("C-a" . mark-whole-buffer)
      ("C-f" . isearch-forward)
-     ("C-." . "\C-d\C-c") ; in keyboard macros, you must specify your
-                          ; real prefix when using one
 
      ;; Keys that should not be overwritten at all
      :map overriding-terminal-local-map
@@ -54,6 +52,8 @@ install and configure =rebound=. Here's an example configuration:
      ("C-M-;" . async-shell-command)
      ("C-c C-;" . shell-command) ; in bindings, it's recommended to use
                                  ; regular prefixes
+     ("C-." . "\C-d\C-c") ; in keyboard macros, you must specify your
+                          ; real prefix when using one
 
      ;; Regular minor mode keys that are only enabled when rebound-mode
      ;; is active
