@@ -30,7 +30,7 @@ install and configure =rebound=. Here's an example configuration:
     :bind*
     (;; Keys that should not be overwritten by minor modes
      ("C-q" . save-buffers-kill-emacs)
-     ("C-w" . kill-this-buffer)
+     ("C-w" . kill-buffer)
      ("C-r" . query-replace-regexp)
      ("C-o" . find-file)
      ("C-s" . save-buffer)
