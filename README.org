@@ -1,3 +1,78 @@
 * =rebound.el= - Safely rebind the prefix keys.
 
-This package rebinds =C-c= to =C-d= and =C-x= to =C-e=.
+Emacs minor mode that rebinds =C-c= and =C-x= to other keys, giving
+you full freedom to use =C-c= and =C-x= for other commands
+(e.g. "copy" and "cut"). That's the only goal and the purpose of
+=rebound=.
+
+** Installation
+
+As this package is not on any repository yet, you can just
+download =rebound.el= and place it into your Emacs configuration
+folder.
+
+From here, it's recommended to use the built-in =use-package= to
+install and configure =rebound=. Here's an example configuration:
+
+#+begin_src emacs-lisp
+  (use-package rebound
+    :load-path "lisp/packages/rebound" ; where rebound.el is stored
+    :demand t ; Must be demanded for C-c and C-x inside bindings to work
+    :commands rebound-mode ; Optional; silences the linter
+    :custom
+    (rebound-cc-key "C-d") ; keys in the format that is accepted by kbd
+    (rebound-cx-key "C-e") ; rebound uses C-d and C-e by default
+    :config
+    ;; If you want to define keys that must not be overwritten
+    (unless overriding-terminal-local-map
+      (setq overriding-terminal-local-map (make-sparse-keymap)))
+    (rebound-mode t) ; Enable by default
+    :bind*
+    (;; Keys that should not be overwritten by minor modes
+     ("C-q" . save-buffers-kill-emacs)
+     ("C-w" . kill-this-buffer)
+     ("C-r" . query-replace-regexp)
+     ("C-o" . find-file)
+     ("C-s" . save-buffer)
+     ("C-a" . mark-whole-buffer)
+     ("C-f" . isearch-forward)
+     ("C-." . "\C-d\C-c") ; in keyboard macros, you must specify your
+                          ; real prefix when using one
+
+     ;; Keys that should not be overwritten at all
+     :map overriding-terminal-local-map
+     ("C-z" . undo-only)
+     ("C-S-z" . undo-redo)
+     ("C-x" . kill-region)
+     ("C-c" . kill-ring-save)
+     ("C-v" . yank))
+
+    :bind
+    (;; Regular global keys
+     ("C-/" . comment-line)
+     ("M-=" . count-words)
+     ("C-M-;" . async-shell-command)
+     ("C-c C-;" . shell-command) ; in bindings, it's recommended to use
+                                 ; regular prefixes
+
+     ;; Regular minor mode keys that are only enabled when rebound-mode
+     ;; is active
+     :map rebound-mode-map
+     ("C-S-r" . query-replace)
+     ("C-S-o" . revert-buffer)
+     ("C-S-s" . write-file)
+     ("C-S-f" . isearch-backward)
+     ("C-+" . text-scale-increase)
+     ("C-=" . text-scale-increase)
+     ("C--" . text-scale-decrease)))
+#+end_src
+
+This package does not come with any bindings except =C-d= and =C-e= by
+default (and you can easily customize them to any other keys you
+want). This is intentional, because I felt there was a lack of simple
+ways to only move the prefix keys. If you want something with
+"batteries included", I suggest you to take a look at [[https://github.com/darkstego/wakib-keys][wakib-keys]],
+which focuses on bringing common keys to Emacs, or [[https://ergoemacs.github.io/][ergoemacs]], which
+(as the name implies) aims to "Create ergonomic keybindings in emacs"
+as well as to also bind familiar keys.
+
