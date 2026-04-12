@@ -22,10 +22,6 @@ install and configure =rebound=. Here's an example configuration:
     :custom
     (rebound-cc-key "C-d") ; keys in the format that is accepted by kbd
     (rebound-cx-key "C-e") ; rebound uses C-d and C-e by default
-    :init
-    ;; If you want to define keys that must not be overwritten
-    (unless overriding-terminal-local-map
-      (setq overriding-terminal-local-map (make-sparse-keymap)))
     :config
     (rebound-mode t) ; Enable by default
     :bind*
@@ -37,9 +33,6 @@ install and configure =rebound=. Here's an example configuration:
      ("C-s" . save-buffer)
      ("C-a" . mark-whole-buffer)
      ("C-f" . isearch-forward)
-
-     ;; Keys that should not be overwritten at all
-     :map overriding-terminal-local-map
      ("C-z" . undo-only)
      ("C-S-z" . undo-redo)
      ("C-x" . kill-region)
